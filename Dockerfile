@@ -3,8 +3,15 @@ FROM alpine:3.8
 MAINTAINER geotaru
 ENV PATH /usr/local/texlive/2018/bin/x86_64-linuxmusl:$PATH
 
+ENV USER geotaru
+ENV HOME /home/${USER}
+
+RUN apk --no-cache --update add bash
+ENV SHELL /bin/bash
+RUN adduser -S ${USER}
+
 WORKDIR /root
-RUN apk --no-cache --update add wget perl bash xz tar fontconfig-dev && \
+RUN apk --no-cache --update add wget perl xz tar fontconfig-dev && \
     wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz  && \
     mkdir install-tl-unx && \
     tar xf install-tl-unx.tar.gz --strip-components 1 -C install-tl-unx
@@ -23,7 +30,10 @@ RUN /root/install-tl-unx/install-tl \
     rm -rf /root/install-tl-unx
 
 COPY ./compile.sh /opt/compile
-WORKDIR /root/workdir
-ENV target /root/target.tex
+RUN chmod 777 /opt/compile
+
+USER ${USER}
+WORKDIR ${HOME}/workdir
+ENV target ${HOME}/target.tex
 
 CMD /opt/compile ${target}
