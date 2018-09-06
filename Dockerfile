@@ -11,15 +11,14 @@ ENV SHELL /bin/bash
 RUN adduser -S ${USER}
 
 WORKDIR /root
+COPY texlive.profile /root/install-tl-unx/
 RUN apk --no-cache --update add wget perl xz tar fontconfig-dev && \
     wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz  && \
     mkdir install-tl-unx && \
-    tar xf install-tl-unx.tar.gz --strip-components 1 -C install-tl-unx
-
-COPY texlive.profile /root/install-tl-unx/
-RUN /root/install-tl-unx/install-tl \
-    --repository=http://mirror.ctan.org/systems/texlive/tlnet/ \
-    --profile=/root/install-tl-unx/texlive.profile && \
+    tar xf install-tl-unx.tar.gz --strip-components 1 -C install-tl-unx && \
+    /root/install-tl-unx/install-tl \
+        --repository=http://mirror.ctan.org/systems/texlive/tlnet/ \
+        --profile=/root/install-tl-unx/texlive.profile && \
     tlmgr install \
         collection-basic collection-latex \
         collection-latexrecommended collection-latexextra \
