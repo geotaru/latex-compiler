@@ -1,6 +1,7 @@
 FROM alpine:3.8
 
-MAINTAINER geotaru
+MAINTAINER geotaru <geotaru.dev@gmail.com>
+
 ENV PATH /usr/local/texlive/2018/bin/x86_64-linuxmusl:$PATH
 
 ENV USER geotaru
